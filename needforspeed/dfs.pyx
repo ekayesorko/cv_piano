@@ -15,24 +15,24 @@ cpdef dfs(vector[ vector[int] ] photo):
     #h,w = photo.shape
     cdef int height = photo.size()
     cdef int width = photo[0].size()
-    printf("%d %d\n", height, width)
+    #printf("%d %d\n", height, width)
     cdef vector[ vector[int] ] visited = np.zeros((height,width),dtype = 'b') 
     cdef int i = 70, j = 0, k = 0
-    cdef int contour_counter = 0, pixel_counter, max_pixel_counter = 0, pressed_key = 0
+    cdef int pixel_counter, pressed_key = 0, max_pixel_counter = 0, key_index = 0
     cdef vector[int] dirx = [-1, -1, -1, 0, 0, 1, 1, 1]
     cdef vector[int] diry = [-1, 0, 1, -1, 1, -1, 0, 1]
     cdef pair[int, int] now
+    cdef float average, total_pixel_counter = 0
 
     for j in range(width):
         if photo[i][j] == 0 and visited[i][j] == False:
-            printf("%d\n", j)
-            contour_counter += 1
             pixel_counter = 0
+            key_index += 1
             stack.clear()
             stack.push_back( cpair(i,j))
+            visited[i][j] = True
             while(stack.empty() == False):
                 now = stack.back()
-                visited[now.first][now.second] = True
                 pixel_counter += 1
                 stack.pop_back()
                 for k in range(8):
@@ -44,14 +44,19 @@ cpdef dfs(vector[ vector[int] ] photo):
                     if visited[next_i][next_j] == True : continue
                     if photo[next_i][next_j] == 255 : continue
                     stack.push_back( cpair(next_i, next_j))
+                    visited[next_i][next_j] = True
             if pixel_counter > max_pixel_counter:
                 max_pixel_counter = pixel_counter
-                pressed_key = contour_counter
-            printf("%d %d\n", contour_counter,pixel_counter)
+                pressed_key = key_index
+
+            total_pixel_counter += pixel_counter 
+            #printf("%d %d\n", contour_counter,pixel_counter)
     
-    if contour_counter == 7:
+    average =  (total_pixel_counter - max_pixel_counter) / (key_index - 1) #excluding the outlier
+    #printf("%f/n", (max_pixel_counter - average) / max_pixel_counter * 100 )
+    if ( (max_pixel_counter - average) / max_pixel_counter * 100 ) > 10 and key_index == 7:
         return pressed_key
-    else: return 0
+    else : return 0
 
 
 

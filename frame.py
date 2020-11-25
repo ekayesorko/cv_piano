@@ -22,7 +22,7 @@ class Frame:
                 self.__counter = 0
                 key_index += 1
                 self.__dfs(i,j)
-                #print('{} {}'.format(self.__counter, key_index))
+                print('{} {}'.format(self.__counter, key_index))
                 if(self.__counter > max_counter):
                     self.pressed_key = key_index
                     max_counter = self.__counter
@@ -43,6 +43,6 @@ class Frame:
                 self.__dfs(next_i, next_j)
                
 if __name__ == "__main__":
-    photo3 = np.load('frame5.npy')
+    photo3 = np.load('frame3.npy')
     frame = Frame(photo3)
     print(frame.pressed_key)

@@ -1,0 +1,3 @@
+#!/home/user/Computer Science/Python Projects/CV_Piano/venv/bin/python3
+from numba.pycc import main
+main()

@@ -1207,13 +1207,15 @@ static PyObject *__pyx_f_3dfs_dfs(std::vector<std::vector<int> >  __pyx_v_photo,
   int __pyx_v_i;
   int __pyx_v_j;
   int __pyx_v_k;
-  int __pyx_v_contour_counter;
   int __pyx_v_pixel_counter;
-  int __pyx_v_max_pixel_counter;
   int __pyx_v_pressed_key;
+  int __pyx_v_max_pixel_counter;
+  int __pyx_v_key_index;
   std::vector<int>  __pyx_v_dirx;
   std::vector<int>  __pyx_v_diry;
   std::pair<int,int>  __pyx_v_now;
+  float __pyx_v_average;
+  float __pyx_v_total_pixel_counter;
   int __pyx_v_next_i;
   int __pyx_v_next_j;
   PyObject *__pyx_r = NULL;
@@ -1231,6 +1233,8 @@ static PyObject *__pyx_f_3dfs_dfs(std::vector<std::vector<int> >  __pyx_v_photo,
   int __pyx_t_11;
   __pyx_t_3dfs_cpair __pyx_t_12;
   int __pyx_t_13;
+  float __pyx_t_14;
+  long __pyx_t_15;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -1241,7 +1245,7 @@ static PyObject *__pyx_f_3dfs_dfs(std::vector<std::vector<int> >  __pyx_v_photo,
  *     #h,w = photo.shape
  *     cdef int height = photo.size()             # <<<<<<<<<<<<<<
  *     cdef int width = photo[0].size()
- *     printf("%d %d\n", height, width)
+ *     #printf("%d %d\n", height, width)
  */
   __pyx_v_height = __pyx_v_photo.size();
 
@@ -1249,26 +1253,17 @@ static PyObject *__pyx_f_3dfs_dfs(std::vector<std::vector<int> >  __pyx_v_photo,
  *     #h,w = photo.shape
  *     cdef int height = photo.size()
  *     cdef int width = photo[0].size()             # <<<<<<<<<<<<<<
- *     printf("%d %d\n", height, width)
+ *     #printf("%d %d\n", height, width)
  *     cdef vector[ vector[int] ] visited = np.zeros((height,width),dtype = 'b')
  */
   __pyx_v_width = (__pyx_v_photo[0]).size();
 
-  /* "dfs.pyx":18
- *     cdef int height = photo.size()
- *     cdef int width = photo[0].size()
- *     printf("%d %d\n", height, width)             # <<<<<<<<<<<<<<
- *     cdef vector[ vector[int] ] visited = np.zeros((height,width),dtype = 'b')
- *     cdef int i = 70, j = 0, k = 0
- */
-  (void)(printf(((char const *)"%d %d\n"), __pyx_v_height, __pyx_v_width));
-
   /* "dfs.pyx":19
  *     cdef int width = photo[0].size()
- *     printf("%d %d\n", height, width)
+ *     #printf("%d %d\n", height, width)
  *     cdef vector[ vector[int] ] visited = np.zeros((height,width),dtype = 'b')             # <<<<<<<<<<<<<<
  *     cdef int i = 70, j = 0, k = 0
- *     cdef int contour_counter = 0, pixel_counter, max_pixel_counter = 0, pressed_key = 0
+ *     cdef int pixel_counter, pressed_key = 0, max_pixel_counter = 0, key_index = 0
  */
   __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 19, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
@@ -1305,10 +1300,10 @@ static PyObject *__pyx_f_3dfs_dfs(std::vector<std::vector<int> >  __pyx_v_photo,
   __pyx_v_visited = __pyx_t_5;
 
   /* "dfs.pyx":20
- *     printf("%d %d\n", height, width)
+ *     #printf("%d %d\n", height, width)
  *     cdef vector[ vector[int] ] visited = np.zeros((height,width),dtype = 'b')
  *     cdef int i = 70, j = 0, k = 0             # <<<<<<<<<<<<<<
- *     cdef int contour_counter = 0, pixel_counter, max_pixel_counter = 0, pressed_key = 0
+ *     cdef int pixel_counter, pressed_key = 0, max_pixel_counter = 0, key_index = 0
  *     cdef vector[int] dirx = [-1, -1, -1, 0, 0, 1, 1, 1]
  */
   __pyx_v_i = 70;
@@ -1318,17 +1313,17 @@ static PyObject *__pyx_f_3dfs_dfs(std::vector<std::vector<int> >  __pyx_v_photo,
   /* "dfs.pyx":21
  *     cdef vector[ vector[int] ] visited = np.zeros((height,width),dtype = 'b')
  *     cdef int i = 70, j = 0, k = 0
- *     cdef int contour_counter = 0, pixel_counter, max_pixel_counter = 0, pressed_key = 0             # <<<<<<<<<<<<<<
+ *     cdef int pixel_counter, pressed_key = 0, max_pixel_counter = 0, key_index = 0             # <<<<<<<<<<<<<<
  *     cdef vector[int] dirx = [-1, -1, -1, 0, 0, 1, 1, 1]
  *     cdef vector[int] diry = [-1, 0, 1, -1, 1, -1, 0, 1]
  */
-  __pyx_v_contour_counter = 0;
-  __pyx_v_max_pixel_counter = 0;
   __pyx_v_pressed_key = 0;
+  __pyx_v_max_pixel_counter = 0;
+  __pyx_v_key_index = 0;
 
   /* "dfs.pyx":22
  *     cdef int i = 70, j = 0, k = 0
- *     cdef int contour_counter = 0, pixel_counter, max_pixel_counter = 0, pressed_key = 0
+ *     cdef int pixel_counter, pressed_key = 0, max_pixel_counter = 0, key_index = 0
  *     cdef vector[int] dirx = [-1, -1, -1, 0, 0, 1, 1, 1]             # <<<<<<<<<<<<<<
  *     cdef vector[int] diry = [-1, 0, 1, -1, 1, -1, 0, 1]
  *     cdef pair[int, int] now
@@ -1364,11 +1359,11 @@ static PyObject *__pyx_f_3dfs_dfs(std::vector<std::vector<int> >  __pyx_v_photo,
   __pyx_v_dirx = __pyx_t_6;
 
   /* "dfs.pyx":23
- *     cdef int contour_counter = 0, pixel_counter, max_pixel_counter = 0, pressed_key = 0
+ *     cdef int pixel_counter, pressed_key = 0, max_pixel_counter = 0, key_index = 0
  *     cdef vector[int] dirx = [-1, -1, -1, 0, 0, 1, 1, 1]
  *     cdef vector[int] diry = [-1, 0, 1, -1, 1, -1, 0, 1]             # <<<<<<<<<<<<<<
  *     cdef pair[int, int] now
- * 
+ *     cdef float average, total_pixel_counter = 0
  */
   __pyx_t_1 = PyList_New(8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 23, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
@@ -1400,24 +1395,33 @@ static PyObject *__pyx_f_3dfs_dfs(std::vector<std::vector<int> >  __pyx_v_photo,
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_diry = __pyx_t_6;
 
-  /* "dfs.pyx":26
+  /* "dfs.pyx":25
+ *     cdef vector[int] diry = [-1, 0, 1, -1, 1, -1, 0, 1]
  *     cdef pair[int, int] now
+ *     cdef float average, total_pixel_counter = 0             # <<<<<<<<<<<<<<
+ * 
+ *     for j in range(width):
+ */
+  __pyx_v_total_pixel_counter = 0.0;
+
+  /* "dfs.pyx":27
+ *     cdef float average, total_pixel_counter = 0
  * 
  *     for j in range(width):             # <<<<<<<<<<<<<<
  *         if photo[i][j] == 0 and visited[i][j] == False:
- *             printf("%d\n", j)
+ *             pixel_counter = 0
  */
   __pyx_t_7 = __pyx_v_width;
   __pyx_t_8 = __pyx_t_7;
   for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
     __pyx_v_j = __pyx_t_9;
 
-    /* "dfs.pyx":27
+    /* "dfs.pyx":28
  * 
  *     for j in range(width):
  *         if photo[i][j] == 0 and visited[i][j] == False:             # <<<<<<<<<<<<<<
- *             printf("%d\n", j)
- *             contour_counter += 1
+ *             pixel_counter = 0
+ *             key_index += 1
  */
     __pyx_t_11 = ((((__pyx_v_photo[__pyx_v_i])[__pyx_v_j]) == 0) != 0);
     if (__pyx_t_11) {
@@ -1430,48 +1434,39 @@ static PyObject *__pyx_f_3dfs_dfs(std::vector<std::vector<int> >  __pyx_v_photo,
     __pyx_L6_bool_binop_done:;
     if (__pyx_t_10) {
 
-      /* "dfs.pyx":28
+      /* "dfs.pyx":29
  *     for j in range(width):
  *         if photo[i][j] == 0 and visited[i][j] == False:
- *             printf("%d\n", j)             # <<<<<<<<<<<<<<
- *             contour_counter += 1
- *             pixel_counter = 0
- */
-      (void)(printf(((char const *)"%d\n"), __pyx_v_j));
-
-      /* "dfs.pyx":29
- *         if photo[i][j] == 0 and visited[i][j] == False:
- *             printf("%d\n", j)
- *             contour_counter += 1             # <<<<<<<<<<<<<<
- *             pixel_counter = 0
- *             stack.clear()
- */
-      __pyx_v_contour_counter = (__pyx_v_contour_counter + 1);
-
-      /* "dfs.pyx":30
- *             printf("%d\n", j)
- *             contour_counter += 1
  *             pixel_counter = 0             # <<<<<<<<<<<<<<
+ *             key_index += 1
  *             stack.clear()
- *             stack.push_back( cpair(i,j))
  */
       __pyx_v_pixel_counter = 0;
 
-      /* "dfs.pyx":31
- *             contour_counter += 1
+      /* "dfs.pyx":30
+ *         if photo[i][j] == 0 and visited[i][j] == False:
  *             pixel_counter = 0
+ *             key_index += 1             # <<<<<<<<<<<<<<
+ *             stack.clear()
+ *             stack.push_back( cpair(i,j))
+ */
+      __pyx_v_key_index = (__pyx_v_key_index + 1);
+
+      /* "dfs.pyx":31
+ *             pixel_counter = 0
+ *             key_index += 1
  *             stack.clear()             # <<<<<<<<<<<<<<
  *             stack.push_back( cpair(i,j))
- *             while(stack.empty() == False):
+ *             visited[i][j] = True
  */
       __pyx_v_stack.clear();
 
       /* "dfs.pyx":32
- *             pixel_counter = 0
+ *             key_index += 1
  *             stack.clear()
  *             stack.push_back( cpair(i,j))             # <<<<<<<<<<<<<<
+ *             visited[i][j] = True
  *             while(stack.empty() == False):
- *                 now = stack.back()
  */
       try {
         __pyx_t_12 = __pyx_t_3dfs_cpair(__pyx_v_i, __pyx_v_j);
@@ -1489,35 +1484,35 @@ static PyObject *__pyx_f_3dfs_dfs(std::vector<std::vector<int> >  __pyx_v_photo,
       /* "dfs.pyx":33
  *             stack.clear()
  *             stack.push_back( cpair(i,j))
+ *             visited[i][j] = True             # <<<<<<<<<<<<<<
+ *             while(stack.empty() == False):
+ *                 now = stack.back()
+ */
+      ((__pyx_v_visited[__pyx_v_i])[__pyx_v_j]) = 1;
+
+      /* "dfs.pyx":34
+ *             stack.push_back( cpair(i,j))
+ *             visited[i][j] = True
  *             while(stack.empty() == False):             # <<<<<<<<<<<<<<
  *                 now = stack.back()
- *                 visited[now.first][now.second] = True
+ *                 pixel_counter += 1
  */
       while (1) {
         __pyx_t_10 = ((__pyx_v_stack.empty() == 0) != 0);
         if (!__pyx_t_10) break;
 
-        /* "dfs.pyx":34
- *             stack.push_back( cpair(i,j))
+        /* "dfs.pyx":35
+ *             visited[i][j] = True
  *             while(stack.empty() == False):
  *                 now = stack.back()             # <<<<<<<<<<<<<<
- *                 visited[now.first][now.second] = True
- *                 pixel_counter += 1
- */
-        __pyx_v_now = __pyx_v_stack.back();
-
-        /* "dfs.pyx":35
- *             while(stack.empty() == False):
- *                 now = stack.back()
- *                 visited[now.first][now.second] = True             # <<<<<<<<<<<<<<
  *                 pixel_counter += 1
  *                 stack.pop_back()
  */
-        ((__pyx_v_visited[__pyx_v_now.first])[__pyx_v_now.second]) = 1;
+        __pyx_v_now = __pyx_v_stack.back();
 
         /* "dfs.pyx":36
+ *             while(stack.empty() == False):
  *                 now = stack.back()
- *                 visited[now.first][now.second] = True
  *                 pixel_counter += 1             # <<<<<<<<<<<<<<
  *                 stack.pop_back()
  *                 for k in range(8):
@@ -1525,7 +1520,7 @@ static PyObject *__pyx_f_3dfs_dfs(std::vector<std::vector<int> >  __pyx_v_photo,
         __pyx_v_pixel_counter = (__pyx_v_pixel_counter + 1);
 
         /* "dfs.pyx":37
- *                 visited[now.first][now.second] = True
+ *                 now = stack.back()
  *                 pixel_counter += 1
  *                 stack.pop_back()             # <<<<<<<<<<<<<<
  *                 for k in range(8):
@@ -1642,7 +1637,7 @@ static PyObject *__pyx_f_3dfs_dfs(std::vector<std::vector<int> >  __pyx_v_photo,
  *                     if visited[next_i][next_j] == True : continue
  *                     if photo[next_i][next_j] == 255 : continue             # <<<<<<<<<<<<<<
  *                     stack.push_back( cpair(next_i, next_j))
- *             if pixel_counter > max_pixel_counter:
+ *                     visited[next_i][next_j] = True
  */
           __pyx_t_10 = ((((__pyx_v_photo[__pyx_v_next_i])[__pyx_v_next_j]) == 0xFF) != 0);
           if (__pyx_t_10) {
@@ -1653,8 +1648,8 @@ static PyObject *__pyx_f_3dfs_dfs(std::vector<std::vector<int> >  __pyx_v_photo,
  *                     if visited[next_i][next_j] == True : continue
  *                     if photo[next_i][next_j] == 255 : continue
  *                     stack.push_back( cpair(next_i, next_j))             # <<<<<<<<<<<<<<
+ *                     visited[next_i][next_j] = True
  *             if pixel_counter > max_pixel_counter:
- *                 max_pixel_counter = pixel_counter
  */
           try {
             __pyx_t_12 = __pyx_t_3dfs_cpair(__pyx_v_next_i, __pyx_v_next_j);
@@ -1668,103 +1663,140 @@ static PyObject *__pyx_f_3dfs_dfs(std::vector<std::vector<int> >  __pyx_v_photo,
             __Pyx_CppExn2PyErr();
             __PYX_ERR(0, 46, __pyx_L1_error)
           }
+
+          /* "dfs.pyx":47
+ *                     if photo[next_i][next_j] == 255 : continue
+ *                     stack.push_back( cpair(next_i, next_j))
+ *                     visited[next_i][next_j] = True             # <<<<<<<<<<<<<<
+ *             if pixel_counter > max_pixel_counter:
+ *                 max_pixel_counter = pixel_counter
+ */
+          ((__pyx_v_visited[__pyx_v_next_i])[__pyx_v_next_j]) = 1;
           __pyx_L10_continue:;
         }
       }
 
-      /* "dfs.pyx":47
- *                     if photo[next_i][next_j] == 255 : continue
+      /* "dfs.pyx":48
  *                     stack.push_back( cpair(next_i, next_j))
+ *                     visited[next_i][next_j] = True
  *             if pixel_counter > max_pixel_counter:             # <<<<<<<<<<<<<<
  *                 max_pixel_counter = pixel_counter
- *                 pressed_key = contour_counter
+ *                 pressed_key = key_index
  */
       __pyx_t_10 = ((__pyx_v_pixel_counter > __pyx_v_max_pixel_counter) != 0);
       if (__pyx_t_10) {
 
-        /* "dfs.pyx":48
- *                     stack.push_back( cpair(next_i, next_j))
+        /* "dfs.pyx":49
+ *                     visited[next_i][next_j] = True
  *             if pixel_counter > max_pixel_counter:
  *                 max_pixel_counter = pixel_counter             # <<<<<<<<<<<<<<
- *                 pressed_key = contour_counter
- *             printf("%d %d\n", contour_counter,pixel_counter)
+ *                 pressed_key = key_index
+ * 
  */
         __pyx_v_max_pixel_counter = __pyx_v_pixel_counter;
 
-        /* "dfs.pyx":49
+        /* "dfs.pyx":50
  *             if pixel_counter > max_pixel_counter:
  *                 max_pixel_counter = pixel_counter
- *                 pressed_key = contour_counter             # <<<<<<<<<<<<<<
- *             printf("%d %d\n", contour_counter,pixel_counter)
+ *                 pressed_key = key_index             # <<<<<<<<<<<<<<
  * 
+ *             total_pixel_counter += pixel_counter
  */
-        __pyx_v_pressed_key = __pyx_v_contour_counter;
+        __pyx_v_pressed_key = __pyx_v_key_index;
 
-        /* "dfs.pyx":47
- *                     if photo[next_i][next_j] == 255 : continue
+        /* "dfs.pyx":48
  *                     stack.push_back( cpair(next_i, next_j))
+ *                     visited[next_i][next_j] = True
  *             if pixel_counter > max_pixel_counter:             # <<<<<<<<<<<<<<
  *                 max_pixel_counter = pixel_counter
- *                 pressed_key = contour_counter
+ *                 pressed_key = key_index
  */
       }
 
-      /* "dfs.pyx":50
- *                 max_pixel_counter = pixel_counter
- *                 pressed_key = contour_counter
- *             printf("%d %d\n", contour_counter,pixel_counter)             # <<<<<<<<<<<<<<
+      /* "dfs.pyx":52
+ *                 pressed_key = key_index
  * 
- *     if contour_counter == 7:
+ *             total_pixel_counter += pixel_counter             # <<<<<<<<<<<<<<
+ *             #printf("%d %d\n", contour_counter,pixel_counter)
+ * 
  */
-      (void)(printf(((char const *)"%d %d\n"), __pyx_v_contour_counter, __pyx_v_pixel_counter));
+      __pyx_v_total_pixel_counter = (__pyx_v_total_pixel_counter + __pyx_v_pixel_counter);
 
-      /* "dfs.pyx":27
+      /* "dfs.pyx":28
  * 
  *     for j in range(width):
  *         if photo[i][j] == 0 and visited[i][j] == False:             # <<<<<<<<<<<<<<
- *             printf("%d\n", j)
- *             contour_counter += 1
+ *             pixel_counter = 0
+ *             key_index += 1
  */
     }
   }
 
-  /* "dfs.pyx":52
- *             printf("%d %d\n", contour_counter,pixel_counter)
+  /* "dfs.pyx":55
+ *             #printf("%d %d\n", contour_counter,pixel_counter)
  * 
- *     if contour_counter == 7:             # <<<<<<<<<<<<<<
- *         return pressed_key
- *     else: return 0
+ *     average =  (total_pixel_counter - max_pixel_counter) / (key_index - 1) #excluding the outlier             # <<<<<<<<<<<<<<
+ *     #printf("%f/n", (max_pixel_counter - average) / max_pixel_counter * 100 )
+ *     if ( (max_pixel_counter - average) / max_pixel_counter * 100 ) > 10 and key_index == 7:
  */
-  __pyx_t_10 = ((__pyx_v_contour_counter == 7) != 0);
+  __pyx_t_14 = (__pyx_v_total_pixel_counter - __pyx_v_max_pixel_counter);
+  __pyx_t_15 = (__pyx_v_key_index - 1);
+  if (unlikely(__pyx_t_15 == 0)) {
+    PyErr_SetString(PyExc_ZeroDivisionError, "float division");
+    __PYX_ERR(0, 55, __pyx_L1_error)
+  }
+  __pyx_v_average = (__pyx_t_14 / __pyx_t_15);
+
+  /* "dfs.pyx":57
+ *     average =  (total_pixel_counter - max_pixel_counter) / (key_index - 1) #excluding the outlier
+ *     #printf("%f/n", (max_pixel_counter - average) / max_pixel_counter * 100 )
+ *     if ( (max_pixel_counter - average) / max_pixel_counter * 100 ) > 10 and key_index == 7:             # <<<<<<<<<<<<<<
+ *         return pressed_key
+ *     else : return 0
+ */
+  __pyx_t_14 = (__pyx_v_max_pixel_counter - __pyx_v_average);
+  if (unlikely(__pyx_v_max_pixel_counter == 0)) {
+    PyErr_SetString(PyExc_ZeroDivisionError, "float division");
+    __PYX_ERR(0, 57, __pyx_L1_error)
+  }
+  __pyx_t_11 = ((((__pyx_t_14 / __pyx_v_max_pixel_counter) * 100.0) > 10.0) != 0);
+  if (__pyx_t_11) {
+  } else {
+    __pyx_t_10 = __pyx_t_11;
+    goto __pyx_L21_bool_binop_done;
+  }
+  __pyx_t_11 = ((__pyx_v_key_index == 7) != 0);
+  __pyx_t_10 = __pyx_t_11;
+  __pyx_L21_bool_binop_done:;
   if (__pyx_t_10) {
 
-    /* "dfs.pyx":53
- * 
- *     if contour_counter == 7:
+    /* "dfs.pyx":58
+ *     #printf("%f/n", (max_pixel_counter - average) / max_pixel_counter * 100 )
+ *     if ( (max_pixel_counter - average) / max_pixel_counter * 100 ) > 10 and key_index == 7:
  *         return pressed_key             # <<<<<<<<<<<<<<
- *     else: return 0
+ *     else : return 0
  * 
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_pressed_key); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 53, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_pressed_key); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 58, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_r = __pyx_t_1;
     __pyx_t_1 = 0;
     goto __pyx_L0;
 
-    /* "dfs.pyx":52
- *             printf("%d %d\n", contour_counter,pixel_counter)
- * 
- *     if contour_counter == 7:             # <<<<<<<<<<<<<<
+    /* "dfs.pyx":57
+ *     average =  (total_pixel_counter - max_pixel_counter) / (key_index - 1) #excluding the outlier
+ *     #printf("%f/n", (max_pixel_counter - average) / max_pixel_counter * 100 )
+ *     if ( (max_pixel_counter - average) / max_pixel_counter * 100 ) > 10 and key_index == 7:             # <<<<<<<<<<<<<<
  *         return pressed_key
- *     else: return 0
+ *     else : return 0
  */
   }
 
-  /* "dfs.pyx":54
- *     if contour_counter == 7:
+  /* "dfs.pyx":59
+ *     if ( (max_pixel_counter - average) / max_pixel_counter * 100 ) > 10 and key_index == 7:
  *         return pressed_key
- *     else: return 0             # <<<<<<<<<<<<<<
+ *     else : return 0             # <<<<<<<<<<<<<<
  * 
  * 
  */
@@ -2146,7 +2178,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 26, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 27, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;
